@@ -1,0 +1,4069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudySphere</title>
+
+<style>
+:root{
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#697386;
+    --primary:#5b5bf7;
+    --primary2:#7c3aed;
+    --border:#e5e7eb;
+    --danger:#ef4444;
+    --success:#16a34a;
+    --input:#f9fafb;
+    --shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+body.dark{
+    --bg:#0b1020;
+    --card:#121a2d;
+    --text:#f3f4f6;
+    --muted:#9ca3af;
+    --primary:#818cf8;
+    --primary2:#a78bfa;
+    --border:#263149;
+    --danger:#f87171;
+    --success:#4ade80;
+    --input:#0f172a;
+    --shadow:0 8px 30px rgba(0,0,0,.35);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    transition:.25s;
+}
+
+button,input,textarea,select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* AUTH */
+
+#authScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.auth-box{
+    width:100%;
+    max-width:430px;
+    background:var(--card);
+    padding:30px;
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo h1{
+    font-size:32px;
+}
+
+.logo p{
+    color:var(--muted);
+    margin-top:6px;
+}
+
+.auth-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.auth-tabs button{
+    flex:1;
+    border:0;
+    padding:12px;
+    border-radius:12px;
+    background:var(--input);
+    color:var(--text);
+}
+
+.auth-tabs button.active{
+    background:var(--primary);
+    color:white;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--input);
+    color:var(--text);
+    outline:none;
+}
+
+textarea{
+    resize:vertical;
+    min-height:100px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--primary);
+}
+
+.primary-btn{
+    width:100%;
+    border:0;
+    padding:13px;
+    border-radius:12px;
+    background:var(--primary);
+    color:white;
+    font-weight:bold;
+}
+
+.primary-btn:hover{
+    opacity:.9;
+}
+
+.message{
+    margin-top:14px;
+    padding:11px;
+    border-radius:10px;
+    font-size:14px;
+    display:none;
+}
+
+.message.info{
+    display:block;
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.message.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+}
+
+.message.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+body.dark .message.info{
+    background:#172554;
+    color:#93c5fd;
+}
+
+body.dark .message.success{
+    background:#052e16;
+    color:#86efac;
+}
+
+body.dark .message.error{
+    background:#450a0a;
+    color:#fca5a5;
+}
+
+/* APP */
+
+#appScreen{
+    min-height:100vh;
+}
+
+.topbar{
+    height:70px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.top-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border:1px solid var(--border);
+    background:var(--input);
+    color:var(--text);
+    border-radius:12px;
+}
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 70px);
+}
+
+.sidebar{
+    width:240px;
+    background:var(--card);
+    border-right:1px solid var(--border);
+    padding:18px 12px;
+    position:fixed;
+    top:70px;
+    bottom:0;
+    left:0;
+    overflow-y:auto;
+}
+
+.nav-btn{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    padding:13px;
+    text-align:left;
+    border-radius:12px;
+    margin-bottom:5px;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:var(--input);
+    color:var(--primary);
+    font-weight:bold;
+}
+
+.main{
+    margin-left:240px;
+    width:calc(100% - 240px);
+    padding:25px;
+}
+
+.page{
+    max-width:1200px;
+    margin:auto;
+}
+
+.page-title{
+    margin-bottom:20px;
+}
+
+.page-title h2{
+    font-size:28px;
+}
+
+.page-title p{
+    color:var(--muted);
+    margin-top:5px;
+}
+
+/* DASHBOARD */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+
+.stat-card .emoji{
+    font-size:25px;
+}
+
+.stat-card h3{
+    margin-top:10px;
+    font-size:28px;
+}
+
+.stat-card p{
+    color:var(--muted);
+    margin-top:4px;
+}
+
+/* CARDS */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+
+.card h3{
+    margin-bottom:8px;
+}
+
+.card p{
+    color:var(--muted);
+}
+
+.card button{
+    margin-top:14px;
+}
+
+.small-btn{
+    border:0;
+    background:var(--primary);
+    color:white;
+    padding:9px 13px;
+    border-radius:9px;
+}
+
+.danger-btn{
+    border:0;
+    background:var(--danger);
+    color:white;
+    padding:9px 13px;
+    border-radius:9px;
+}
+
+/* STATUS */
+
+.status-card{
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.status-dot{
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    background:#9ca3af;
+    flex-shrink:0;
+}
+
+.status-dot.active{
+    background:#22c55e;
+    box-shadow:0 0 0 5px rgba(34,197,94,.12);
+}
+
+.status-text{
+    font-weight:bold;
+    font-size:17px;
+}
+
+.status-subtext{
+    color:var(--muted);
+    margin-top:4px;
+    font-size:14px;
+}
+
+/* TIMER */
+
+.timer-box{
+    max-width:600px;
+    margin:auto;
+    text-align:center;
+}
+
+.timer-subject{
+    max-width:350px;
+    margin:0 auto;
+    text-align:left;
+}
+
+.timer-display{
+    font-size:75px;
+    font-weight:bold;
+    margin:30px 0;
+    letter-spacing:3px;
+}
+
+.timer-controls{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.timer-controls button{
+    border:0;
+    padding:12px 22px;
+    border-radius:12px;
+    color:white;
+    background:var(--primary);
+}
+
+.timer-controls button:hover{
+    opacity:.9;
+}
+
+.timer-status{
+    margin-top:20px;
+    padding:13px;
+    border-radius:12px;
+    background:var(--input);
+    color:var(--muted);
+}
+
+.timer-status strong{
+    color:var(--text);
+}
+
+/* SUBJECTS */
+
+.subject-card{
+    text-align:center;
+}
+
+.subject-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.subject-hours{
+    font-size:26px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+/* VAULT */
+
+.vault-toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.vault-toolbar input{
+    flex:1;
+    min-width:200px;
+}
+
+.vault-toolbar select{
+    width:auto;
+    min-width:180px;
+}
+
+.upload-box{
+    background:var(--card);
+    border:2px dashed var(--border);
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:20px;
+}
+
+.upload-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.file-input{
+    padding:20px;
+    border:1px dashed var(--border);
+    border-radius:12px;
+    background:var(--input);
+}
+
+.file-input input{
+    border:0;
+    padding:0;
+    background:transparent;
+}
+
+.material-card{
+    position:relative;
+}
+
+.material-icon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.material-type{
+    display:inline-block;
+    font-size:12px;
+    padding:5px 8px;
+    border-radius:8px;
+    background:var(--input);
+    color:var(--primary);
+    margin-bottom:8px;
+}
+
+.material-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.material-actions a{
+    display:inline-block;
+    text-decoration:none;
+    color:white;
+    background:var(--primary);
+    padding:9px 12px;
+    border-radius:9px;
+    margin-top:12px;
+}
+
+/* PROFILE */
+
+.profile-box{
+    max-width:600px;
+}
+
+/* GROUPS */
+
+.group-card{
+    display:flex;
+    flex-direction:column;
+}
+
+.group-code{
+    margin-top:10px;
+    padding:10px;
+    border-radius:10px;
+    background:var(--input);
+    font-family:monospace;
+}
+
+/* ADMIN */
+
+.admin-warning{
+    background:#fff7ed;
+    color:#9a3412;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+body.dark .admin-warning{
+    background:#431407;
+    color:#fdba74;
+}
+
+/* MOBILE */
+
+.mobile-menu{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+        z-index:200;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+}
+
+@media(max-width:600px){
+
+    .topbar{
+        padding:0 12px;
+    }
+
+    .brand{
+        font-size:18px;
+    }
+
+    .main{
+        padding:15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .upload-grid{
+        grid-template-columns:1fr;
+    }
+
+    .timer-display{
+        font-size:55px;
+    }
+
+    .auth-box{
+        padding:22px;
+    }
+
+    .status-card{
+        padding:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= AUTH ================= -->
+
+<section id="authScreen">
+
+<div class="auth-box">
+
+<div class="logo">
+<h1>🌌 StudySphere</h1>
+<p>Your personal study space</p>
+</div>
+
+<div class="auth-tabs">
+<button id="loginTab" class="active" onclick="showLogin()">Login</button>
+<button id="registerTab" onclick="showRegister()">Register</button>
+</div>
+
+<div id="loginForm">
+
+<div class="form-group">
+<label>Email</label>
+<input id="loginEmail" type="email" placeholder="Enter your email">
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter your password">
+</div>
+
+<button id="loginButton" class="primary-btn" onclick="login()">
+Login
+</button>
+
+<div id="loginMessage" class="message"></div>
+
+</div>
+
+<div id="registerForm" class="hidden">
+
+<div class="form-group">
+<label>Name</label>
+<input id="registerName" type="text" placeholder="Your name">
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input id="registerEmail" type="email" placeholder="Your email">
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<input id="registerPassword" type="password" placeholder="Create password">
+</div>
+
+<button id="registerButton" class="primary-btn" onclick="register()">
+Create Account
+</button>
+
+<div id="registerMessage" class="message"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= APP ================= -->
+
+<section id="appScreen" class="hidden">
+
+<header class="topbar">
+
+<div class="brand">
+🌌 StudySphere
+</div>
+
+<div class="top-actions">
+
+<button class="icon-btn mobile-menu" onclick="toggleSidebar()">
+☰
+</button>
+
+<button class="icon-btn" onclick="toggleTheme()" id="themeButton">
+🌙
+</button>
+
+<button class="icon-btn" onclick="logout()">
+↪
+</button>
+
+</div>
+
+</header>
+
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+
+<button class="nav-btn active" onclick="showPage('dashboard',this)">
+🏠 Dashboard
+</button>
+
+<button class="nav-btn" onclick="showPage('timer',this)">
+⏱️ Study Timer
+</button>
+
+<button class="nav-btn" onclick="showPage('subjects',this)">
+📚 Subjects
+</button>
+
+<button class="nav-btn" onclick="showPage('vault',this)">
+📂 Study Vault
+</button>
+
+<button class="nav-btn" onclick="showPage('groups',this)">
+👥 Groups
+</button>
+
+<button class="nav-btn" onclick="showPage('leaderboard',this)">
+🏆 Leaderboard
+</button>
+
+<button class="nav-btn" onclick="showPage('profile',this)">
+👤 Profile
+</button>
+
+<button id="adminNav" class="nav-btn hidden" onclick="showPage('admin',this)">
+👑 Admin
+</button>
+
+</aside>
+
+
+<main class="main">
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page">
+
+<div class="page-title">
+<h2>Welcome back, <span id="dashboardName">Student</span> 👋</h2>
+<p>Ready to study?</p>
+</div>
+
+<div class="card status-card">
+
+<div id="dashboardStatusDot" class="status-dot"></div>
+
+<div>
+<div class="status-text" id="dashboardStatus">
+Not studying right now
+</div>
+
+<div class="status-subtext">
+Your current StudySphere activity
+</div>
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-card">
+<div class="emoji">⏱️</div>
+<h3 id="dashboardTime">0</h3>
+<p>Study minutes</p>
+</div>
+
+<div class="stat-card">
+<div class="emoji">📚</div>
+<h3 id="dashboardSubjects">0</h3>
+<p>Subjects</p>
+</div>
+
+<div class="stat-card">
+<div class="emoji">📂</div>
+<h3 id="dashboardMaterials">0</h3>
+<p>Vault materials</p>
+</div>
+
+<div class="stat-card">
+<div class="emoji">👥</div>
+<h3 id="dashboardGroups">0</h3>
+<p>Groups</p>
+</div>
+
+</div>
+
+<div class="card">
+<h3>🚀 StudySphere</h3>
+<p>
+Use the Study Timer to track your study sessions and the Study Vault
+to keep your PDFs, images and notes in one place.
+</p>
+</div>
+
+</section>
+
+
+<!-- TIMER -->
+
+<section id="timer" class="page hidden">
+
+<div class="page-title">
+<h2>⏱️ Study Timer</h2>
+<p>Real-time stopwatch — study as long as you want.</p>
+</div>
+
+<div class="card timer-box">
+
+<div class="timer-subject">
+
+<div class="form-group">
+
+<label>📚 Select Subject</label>
+
+<select id="timerSubject" onchange="changeTimerSubject()">
+
+<option value="">Choose a subject</option>
+<option value="Physics">Physics</option>
+<option value="Chemistry">Chemistry</option>
+<option value="Mathematics">Mathematics</option>
+<option value="English">English</option>
+<option value="Information Technology">Information Technology</option>
+<option value="Physical Education">Physical Education</option>
+<option value="Fine Arts">Fine Arts</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="timer-display" id="timerDisplay">
+00:00
+</div>
+
+<div class="timer-controls">
+
+<button onclick="startTimer()">▶ Start</button>
+
+<button onclick="pauseTimer()">⏸ Pause</button>
+
+<button onclick="resetTimer()">↻ Reset</button>
+
+</div>
+
+<div class="timer-status">
+
+Current status:
+<strong id="timerStatus">
+Not studying
+</strong>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SUBJECTS -->
+
+<section id="subjects" class="page hidden">
+
+<div class="page-title">
+<h2>📚 Subjects</h2>
+<p>Your Class 11 study subjects</p>
+</div>
+
+<div class="grid" id="subjectsGrid"></div>
+
+</section>
+
+
+<!-- STUDY VAULT -->
+
+<section id="vault" class="page hidden">
+
+<div class="page-title">
+<h2>📂 Study Vault</h2>
+<p>Store your study materials in one place.</p>
+</div>
+
+<div class="upload-box">
+
+<h3>➕ Add Material</h3>
+
+<br>
+
+<div class="upload-grid">
+
+<div>
+
+<div class="form-group">
+<label>Material title</label>
+<input id="materialTitle" placeholder="Example: NLM Notes">
+</div>
+
+<div class="form-group">
+<label>Subject</label>
+
+<select id="materialSubject">
+
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Mathematics</option>
+<option>English</option>
+<option>Information Technology</option>
+<option>Physical Education</option>
+<option>Fine Arts</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+<label>Type</label>
+
+<select id="materialType">
+
+<option value="file">PDF / File</option>
+<option value="image">Image</option>
+<option value="text">Text Note</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="form-group">
+
+<label>Text note</label>
+
+<textarea
+id="materialText"
+placeholder="Write your note here if this is a text material..."
+></textarea>
+
+</div>
+
+<div class="file-input">
+<input id="materialFile" type="file">
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<button class="primary-btn" onclick="addMaterial()">
+☁️ Save to Study Vault
+</button>
+
+<div id="vaultMessage" class="message"></div>
+
+</div>
+
+
+<div class="vault-toolbar">
+
+<input
+id="vaultSearch"
+placeholder="🔍 Search materials..."
+oninput="renderMaterials()"
+>
+
+<select id="vaultFilter" onchange="renderMaterials()">
+
+<option value="All">All Subjects</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Mathematics</option>
+<option>English</option>
+<option>Information Technology</option>
+<option>Physical Education</option>
+<option>Fine Arts</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="grid" id="materialsGrid"></div>
+
+</section>
+
+
+<!-- GROUPS -->
+
+<section id="groups" class="page hidden">
+
+<div class="page-title">
+<h2>👥 Study Groups</h2>
+<p>Create or join study groups.</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>➕ Create Group</h3>
+
+<br>
+
+<div class="form-group">
+<label>Group name</label>
+<input id="groupName" placeholder="Example: Physics Squad">
+</div>
+
+<div class="form-group">
+<label>Private group?</label>
+
+<select id="groupPrivate">
+
+<option value="true">Yes</option>
+<option value="false">No</option>
+
+</select>
+
+</div>
+
+<button class="small-btn" onclick="createGroup()">
+Create Group
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h3>🔑 Join Group</h3>
+
+<br>
+
+<div class="form-group">
+<label>Group code</label>
+<input id="joinGroupCode" placeholder="Enter group code">
+</div>
+
+<button class="small-btn" onclick="joinGroup()">
+Join Group
+</button>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="grid" id="groupsGrid"></div>
+
+</section>
+
+
+<!-- LEADERBOARD -->
+
+<section id="leaderboard" class="page hidden">
+
+<div class="page-title">
+<h2>🏆 Leaderboard</h2>
+<p>Study activity of StudySphere members.</p>
+</div>
+
+<div class="grid" id="leaderboardGrid"></div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profile" class="page hidden">
+
+<div class="page-title">
+<h2>👤 Profile</h2>
+<p>Manage your StudySphere profile.</p>
+</div>
+
+<div class="card profile-box">
+
+<div class="form-group">
+<label>Name</label>
+<input id="profileName">
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input id="profileEmail" disabled>
+</div>
+
+<button class="small-btn" onclick="saveProfile()">
+Save Profile
+</button>
+
+<div id="profileMessage" class="message"></div>
+
+</div>
+
+</section>
+
+
+<!-- ADMIN -->
+
+<section id="admin" class="page hidden">
+
+<div class="page-title">
+<h2>👑 Admin Dashboard</h2>
+<p>Only the configured admin account can access this section.</p>
+</div>
+
+<div class="admin-warning">
+Admin information is loaded from your Firebase Firestore data.
+</div>
+
+<div class="stats">
+
+<div class="stat-card">
+<div class="emoji">👤</div>
+<h3 id="adminUsers">0</h3>
+<p>Registered profiles</p>
+</div>
+
+<div class="stat-card">
+<div class="emoji">📂</div>
+<h3 id="adminMaterials">0</h3>
+<p>Materials</p>
+</div>
+
+<div class="stat-card">
+<div class="emoji">👥</div>
+<h3 id="adminGroups">0</h3>
+<p>Groups</p>
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+</section>
+
+
+<!-- ================= FIREBASE ================= -->
+
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+import {
+    getFirestore,
+    collection,
+    doc,
+    getDoc,
+    setDoc,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    query,
+    where,
+    onSnapshot,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+
+
+/* ================= CONFIG ================= */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC8UbyTIHeIM0-h00fa-9wVfZyJu1Ff-Mo",
+    authDomain: "studysphere-2011.firebaseapp.com",
+    projectId: "studysphere-2011",
+    storageBucket: "studysphere-2011.firebasestorage.app",
+    messagingSenderId: "203304259598",
+    appId: "1:203304259598:web:80a54c1307de3f959a6c5f",
+    measurementId: "G-GG3HKX4BBM"
+};
+
+const ADMIN_UID = "idf3QUNXfkhRabwSi26hKBu1aJg2";
+
+
+/* ================= FIREBASE INIT ================= */
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+const storage = getStorage(app);
+
+
+/* ================= GLOBALS ================= */
+
+let currentUser = null;
+let currentUserData = null;
+
+let materials = [];
+let groups = [];
+let users = [];
+
+let unsubscribeMaterials = null;
+let unsubscribeGroups = null;
+let unsubscribeUsers = null;
+
+
+/* ================= REAL-TIME STOPWATCH ================= */
+
+/*
+    The stopwatch is NOT a countdown.
+
+    It starts at 00:00 and counts upward.
+
+    Timestamp-based timing is used so the displayed time
+    follows actual elapsed time instead of depending on
+    setInterval() being perfectly accurate.
+*/
+
+let stopwatchElapsedSeconds = 0;
+
+let stopwatchStartedAt = null;
+
+let stopwatchInterval = null;
+
+let selectedTimerSubject = "";
+
+let isStudying = false;
+
+
+/*
+    These values keep track of subject-wise study time.
+
+    Example:
+
+    subjectMinutes = {
+        Physics: 12.5,
+        Chemistry: 8.25
+    }
+*/
+
+let subjectMinutes = {};
+
+let lastSavedSubjectSeconds = 0;
+
+
+/* ================= SUBJECT LIST ================= */
+
+const subjectList = [
+
+    ["⚛️","Physics"],
+
+    ["🧪","Chemistry"],
+
+    ["📐","Mathematics"],
+
+    ["📖","English"],
+
+    ["💻","Information Technology"],
+
+    ["🏃","Physical Education"],
+
+    ["🎨","Fine Arts"]
+
+];
+
+
+/* ================= AUTH UI ================= */
+
+window.showLogin = function(){
+
+    document
+        .getElementById("loginForm")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("registerForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("loginTab")
+        .classList.add("active");
+
+    document
+        .getElementById("registerTab")
+        .classList.remove("active");
+
+};
+
+
+window.showRegister = function(){
+
+    document
+        .getElementById("registerForm")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("loginForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("registerTab")
+        .classList.add("active");
+
+    document
+        .getElementById("loginTab")
+        .classList.remove("active");
+
+};
+
+
+/* ================= MESSAGE ================= */
+
+function showMessage(id,text,type){
+
+    const el =
+        document.getElementById(id);
+
+    if(!el) return;
+
+    el.textContent = text;
+
+    el.className =
+        "message " + type;
+
+}
+
+
+/* ================= REGISTER ================= */
+
+window.register = async function(){
+
+    const name =
+        document
+        .getElementById("registerName")
+        .value
+        .trim();
+
+    const email =
+        document
+        .getElementById("registerEmail")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("registerPassword")
+        .value;
+
+
+    if(!name || !email || !password){
+
+        showMessage(
+            "registerMessage",
+            "Please fill all fields.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(password.length < 6){
+
+        showMessage(
+            "registerMessage",
+            "Password must be at least 6 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById("registerButton");
+
+    button.disabled = true;
+
+    button.textContent =
+        "Creating account...";
+
+
+    try{
+
+        const result =
+            await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+
+        await updateProfile(
+            result.user,
+            {
+                displayName:name
+            }
+        );
+
+
+        await setDoc(
+            doc(
+                db,
+                "users",
+                result.user.uid
+            ),
+            {
+                uid:result.user.uid,
+                name:name,
+                email:email,
+                totalMinutes:0,
+                subjectMinutes:{},
+                createdAt:serverTimestamp()
+            },
+            {
+                merge:true
+            }
+        );
+
+
+        showMessage(
+            "registerMessage",
+            "Account created successfully!",
+            "success"
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "registerMessage",
+            "Registration failed: " +
+            error.message,
+            "error"
+        );
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Create Account";
+
+};
+
+
+/* ================= LOGIN ================= */
+
+window.login = async function(){
+
+    const email =
+        document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
+
+    const button =
+        document.getElementById("loginButton");
+
+
+    if(!email || !password){
+
+        showMessage(
+            "loginMessage",
+            "Please enter your email and password.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Connecting...";
+
+
+    try{
+
+        showMessage(
+            "loginMessage",
+            "Connecting to Firebase...",
+            "info"
+        );
+
+
+        const result =
+            await Promise.race([
+
+                signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                ),
+
+                new Promise((_,reject)=>{
+
+                    setTimeout(()=>{
+
+                        reject(
+                            new Error(
+                                "Firebase login timed out after 15 seconds."
+                            )
+                        );
+
+                    },15000);
+
+                })
+
+            ]);
+
+
+        console.log(
+            "Firebase authentication successful:",
+            result.user.uid
+        );
+
+
+        showMessage(
+            "loginMessage",
+            "Login successful! Opening StudySphere...",
+            "success"
+        );
+
+
+        openAppForUser(result.user);
+
+
+    }catch(error){
+
+        console.error(
+            "LOGIN ERROR:",
+            error
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+            "Login";
+
+
+        let message =
+            "Login failed: " +
+            error.message;
+
+
+        if(error.code === "auth/invalid-credential"){
+
+            message =
+                "Wrong email or password.";
+
+        }else if(error.code === "auth/user-not-found"){
+
+            message =
+                "This account does not exist.";
+
+        }else if(error.code === "auth/wrong-password"){
+
+            message =
+                "Wrong password.";
+
+        }else if(error.code === "auth/network-request-failed"){
+
+            message =
+                "Network error. Check your internet connection.";
+
+        }else if(
+            error.message &&
+            error.message.includes("timed out")
+        ){
+
+            message =
+                "Firebase is not responding on this phone. The local HTML file may be causing the problem.";
+
+        }
+
+
+        showMessage(
+            "loginMessage",
+            message,
+            "error"
+        );
+
+    }
+
+};
+
+
+/* ================= AUTH STATE ================= */
+
+onAuthStateChanged(
+    auth,
+    (user)=>{
+
+        if(user){
+
+            openAppForUser(user);
+
+        }else{
+
+            currentUser = null;
+
+            currentUserData = null;
+
+            stopListeners();
+
+            stopStopwatch(false);
+
+            document
+                .getElementById("appScreen")
+                .classList.add("hidden");
+
+            document
+                .getElementById("authScreen")
+                .classList.remove("hidden");
+
+        }
+
+    }
+);
+
+
+/* ================= OPEN APP ================= */
+
+function openAppForUser(user){
+
+    if(
+        currentUser &&
+        currentUser.uid === user.uid
+    ){
+
+        return;
+
+    }
+
+
+    currentUser = user;
+
+
+    currentUserData = {
+
+        uid:user.uid,
+
+        name:
+            user.displayName ||
+            "Student",
+
+        email:
+            user.email ||
+            "",
+
+        totalMinutes:0,
+
+        subjectMinutes:{}
+
+    };
+
+
+    document
+        .getElementById("authScreen")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("appScreen")
+        .classList.remove("hidden");
+
+
+    updateUserUI();
+
+    startListeners();
+
+    showPage("dashboard");
+
+    syncProfile(user);
+
+}
+
+
+/* ================= PROFILE SYNC ================= */
+
+async function syncProfile(user){
+
+    try{
+
+        const userRef =
+            doc(
+                db,
+                "users",
+                user.uid
+            );
+
+
+        const snap =
+            await getDoc(userRef);
+
+
+        if(snap.exists()){
+
+            currentUserData = {
+
+                ...currentUserData,
+
+                ...snap.data(),
+
+                subjectMinutes:
+                    snap.data().subjectMinutes || {}
+
+            };
+
+
+            subjectMinutes =
+                {
+                    ...(snap.data().subjectMinutes || {})
+                };
+
+
+        }else{
+
+            await setDoc(
+                userRef,
+                {
+                    uid:user.uid,
+                    name:
+                        user.displayName ||
+                        "Student",
+                    email:
+                        user.email ||
+                        "",
+                    totalMinutes:0,
+                    subjectMinutes:{},
+                    createdAt:serverTimestamp()
+                },
+                {
+                    merge:true
+                }
+            );
+
+        }
+
+
+        updateUserUI();
+
+        renderSubjects();
+
+
+    }catch(error){
+
+        console.warn(
+            "Profile sync failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ================= UI ================= */
+
+function updateUserUI(){
+
+    const name =
+        currentUserData?.name ||
+        currentUser?.displayName ||
+        "Student";
+
+
+    document
+        .getElementById("dashboardName")
+        .textContent =
+        name;
+
+
+    document
+        .getElementById("profileName")
+        .value =
+        name;
+
+
+    document
+        .getElementById("profileEmail")
+        .value =
+        currentUser?.email || "";
+
+
+    document
+        .getElementById("dashboardTime")
+        .textContent =
+        formatStudyMinutes(
+            currentUserData?.totalMinutes || 0
+        );
+
+
+    if(
+        currentUser?.uid === ADMIN_UID
+    ){
+
+        document
+            .getElementById("adminNav")
+            .classList.remove("hidden");
+
+    }else{
+
+        document
+            .getElementById("adminNav")
+            .classList.add("hidden");
+
+    }
+
+}
+
+
+/* ================= PAGE NAVIGATION ================= */
+
+window.showPage = function(page,button){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(el=>{
+
+            el.classList.add("hidden");
+
+        });
+
+
+    const selected =
+        document.getElementById(page);
+
+
+    if(selected){
+
+        selected.classList.remove("hidden");
+
+    }
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(el=>{
+
+            el.classList.remove("active");
+
+        });
+
+
+    if(button){
+
+        button.classList.add("active");
+
+    }
+
+
+    document
+        .getElementById("sidebar")
+        .classList.remove("open");
+
+};
+
+
+/* ================= SIDEBAR ================= */
+
+window.toggleSidebar = function(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+};
+
+
+/* ================= THEME ================= */
+
+window.toggleTheme = function(){
+
+    document.body.classList.toggle("dark");
+
+
+    const dark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "studysphereTheme",
+        dark ? "dark" : "light"
+    );
+
+
+    document
+        .getElementById("themeButton")
+        .textContent =
+        dark ? "☀️" : "🌙";
+
+};
+
+
+function loadTheme(){
+
+    const theme =
+        localStorage.getItem(
+            "studysphereTheme"
+        );
+
+
+    if(theme === "dark"){
+
+        document.body.classList.add("dark");
+
+        document
+            .getElementById("themeButton")
+            .textContent =
+            "☀️";
+
+    }
+
+}
+
+
+/* ================= CURRENT STATUS ================= */
+
+function updateCurrentStatus(){
+
+    const dashboardStatus =
+        document.getElementById(
+            "dashboardStatus"
+        );
+
+    const dashboardDot =
+        document.getElementById(
+            "dashboardStatusDot"
+        );
+
+    const timerStatus =
+        document.getElementById(
+            "timerStatus"
+        );
+
+
+    if(isStudying && selectedTimerSubject){
+
+        const status =
+            "Studying " +
+            selectedTimerSubject;
+
+
+        dashboardStatus.textContent =
+            status;
+
+
+        timerStatus.textContent =
+            status;
+
+
+        dashboardDot.classList.add(
+            "active"
+        );
+
+    }else{
+
+        dashboardStatus.textContent =
+            "Not studying right now";
+
+
+        timerStatus.textContent =
+            "Not studying";
+
+
+        dashboardDot.classList.remove(
+            "active"
+        );
+
+    }
+
+}
+
+
+/* ================= SUBJECT CHANGE ================= */
+
+window.changeTimerSubject = function(){
+
+    const select =
+        document.getElementById(
+            "timerSubject"
+        );
+
+
+    /*
+        Don't allow changing the subject
+        while the stopwatch is running.
+    */
+
+    if(isStudying){
+
+        select.value =
+            selectedTimerSubject;
+
+        return;
+
+    }
+
+
+    selectedTimerSubject =
+        select.value;
+
+
+    updateCurrentStatus();
+
+};
+
+
+/* ================= TIMER DISPLAY ================= */
+
+function updateTimerDisplay(){
+
+    const totalSeconds =
+        Math.max(
+            0,
+            Math.floor(stopwatchElapsedSeconds)
+        );
+
+
+    const hours =
+        Math.floor(
+            totalSeconds / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    let display;
+
+
+    if(hours > 0){
+
+        display =
+            String(hours).padStart(2,"0")
+            + ":"
+            + String(minutes).padStart(2,"0")
+            + ":"
+            + String(seconds).padStart(2,"0");
+
+    }else{
+
+        display =
+            String(minutes).padStart(2,"0")
+            + ":"
+            + String(seconds).padStart(2,"0");
+
+    }
+
+
+    document
+        .getElementById("timerDisplay")
+        .textContent =
+        display;
+
+}
+
+
+/* ================= REAL-TIME TIMER ================= */
+
+function calculateCurrentElapsedSeconds(){
+
+    if(
+        !isStudying ||
+        stopwatchStartedAt === null
+    ){
+
+        return stopwatchElapsedSeconds;
+
+    }
+
+
+    return Math.max(
+        0,
+        (Date.now() - stopwatchStartedAt) / 1000
+        + stopwatchElapsedSeconds
+    );
+
+}
+
+
+/*
+    This function adds actual elapsed seconds
+    to the selected subject.
+
+    It updates the screen every second.
+
+    Firebase is updated periodically rather than
+    writing a document on every single second.
+*/
+
+async function recordCurrentElapsedTime(){
+
+    if(
+        !currentUser ||
+        !selectedTimerSubject ||
+        !isStudying ||
+        stopwatchStartedAt === null
+    ){
+
+        return;
+
+    }
+
+
+    const nowElapsed =
+        calculateCurrentElapsedSeconds();
+
+
+    const addedSeconds =
+        nowElapsed -
+        lastSavedSubjectSeconds;
+
+
+    if(addedSeconds <= 0){
+
+        return;
+
+    }
+
+
+    const addedMinutes =
+        addedSeconds / 60;
+
+
+    subjectMinutes[selectedTimerSubject] =
+        (
+            Number(
+                subjectMinutes[selectedTimerSubject] || 0
+            )
+            +
+            addedMinutes
+        );
+
+
+    lastSavedSubjectSeconds =
+        nowElapsed;
+
+
+    /*
+        Update local UI immediately.
+    */
+
+    renderSubjects();
+
+
+    const total =
+        Object.values(subjectMinutes)
+        .reduce(
+            (sum,value)=>
+                sum + Number(value || 0),
+            0
+        );
+
+
+    currentUserData.totalMinutes =
+        total;
+
+
+    document
+        .getElementById("dashboardTime")
+        .textContent =
+        formatStudyMinutes(total);
+
+
+    /*
+        Save to Firebase.
+    */
+
+    try{
+
+        await setDoc(
+            doc(
+                db,
+                "users",
+                currentUser.uid
+            ),
+            {
+                totalMinutes:total,
+                subjectMinutes:subjectMinutes
+            },
+            {
+                merge:true
+            }
+        );
+
+    }catch(error){
+
+        console.error(
+            "Study time save error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*
+    Every second:
+    - calculate actual elapsed time
+    - update stopwatch display
+    - update subject minutes on screen
+
+    Firebase saving is done every 10 seconds.
+*/
+
+let lastFirebaseSaveTime = 0;
+
+
+function updateRunningStopwatch(){
+
+    if(!isStudying) return;
+
+
+    stopwatchElapsedSeconds =
+        calculateCurrentElapsedSeconds();
+
+
+    updateTimerDisplay();
+
+
+    /*
+        Show subject time every second.
+    */
+
+    renderSubjects();
+
+
+    const now =
+        Date.now();
+
+
+    /*
+        Save to Firebase every 10 seconds.
+    */
+
+    if(
+        now - lastFirebaseSaveTime >= 10000
+    ){
+
+        lastFirebaseSaveTime =
+            now;
+
+        recordCurrentElapsedTime();
+
+    }
+
+}
+
+
+/* ================= START ================= */
+
+window.startTimer = function(){
+
+    if(!selectedTimerSubject){
+
+        alert(
+            "Please select a subject first."
+        );
+
+        return;
+
+    }
+
+
+    if(isStudying){
+
+        return;
+
+    }
+
+
+    /*
+        If this is a new run after pause,
+        stopwatchElapsedSeconds already contains
+        the previous elapsed time.
+    */
+
+    stopwatchStartedAt =
+        Date.now();
+
+
+    lastSavedSubjectSeconds =
+        stopwatchElapsedSeconds;
+
+
+    isStudying = true;
+
+
+    updateCurrentStatus();
+
+
+    const select =
+        document.getElementById(
+            "timerSubject"
+        );
+
+
+    select.disabled = true;
+
+
+    updateTimerDisplay();
+
+
+    /*
+        250ms keeps the display responsive,
+        while the displayed seconds are calculated
+        from real timestamps.
+    */
+
+    stopwatchInterval =
+        setInterval(
+            updateRunningStopwatch,
+            250
+        );
+
+};
+
+
+/* ================= PAUSE ================= */
+
+window.pauseTimer = async function(){
+
+    if(!isStudying){
+
+        return;
+
+    }
+
+
+    /*
+        Capture the exact elapsed time
+        before stopping the stopwatch.
+    */
+
+    stopwatchElapsedSeconds =
+        calculateCurrentElapsedSeconds();
+
+
+    /*
+        Save the final amount for this running period.
+    */
+
+    await recordCurrentElapsedTime();
+
+
+    clearInterval(
+        stopwatchInterval
+    );
+
+
+    stopwatchInterval = null;
+
+    stopwatchStartedAt = null;
+
+    isStudying = false;
+
+
+    const select =
+        document.getElementById(
+            "timerSubject"
+        );
+
+
+    select.disabled = false;
+
+
+    updateTimerDisplay();
+
+    updateCurrentStatus();
+
+};
+
+
+/* ================= RESET ================= */
+
+window.resetTimer = async function(){
+
+    /*
+        If running, save the time first.
+    */
+
+    if(isStudying){
+
+        stopwatchElapsedSeconds =
+            calculateCurrentElapsedSeconds();
+
+        await recordCurrentElapsedTime();
+
+    }
+
+
+    clearInterval(
+        stopwatchInterval
+    );
+
+
+    stopwatchInterval = null;
+
+    stopwatchStartedAt = null;
+
+    isStudying = false;
+
+    stopwatchElapsedSeconds = 0;
+
+    lastSavedSubjectSeconds = 0;
+
+
+    const select =
+        document.getElementById(
+            "timerSubject"
+        );
+
+
+    select.disabled = false;
+
+
+    updateTimerDisplay();
+
+    updateCurrentStatus();
+
+};
+
+
+/* ================= STOPWATCH ON LOGOUT ================= */
+
+function stopStopwatch(saveTime){
+
+    if(
+        isStudying &&
+        stopwatchStartedAt !== null
+    ){
+
+        stopwatchElapsedSeconds =
+            calculateCurrentElapsedSeconds();
+
+    }
+
+
+    clearInterval(
+        stopwatchInterval
+    );
+
+
+    stopwatchInterval = null;
+
+    stopwatchStartedAt = null;
+
+    isStudying = false;
+
+    stopwatchElapsedSeconds = 0;
+
+    lastSavedSubjectSeconds = 0;
+
+
+    const select =
+        document.getElementById(
+            "timerSubject"
+        );
+
+
+    if(select){
+
+        select.disabled = false;
+
+    }
+
+
+    updateTimerDisplay();
+
+    updateCurrentStatus();
+
+}
+
+
+/* ================= SUBJECT TIME FORMAT ================= */
+
+function formatStudyMinutes(minutes){
+
+    const value =
+        Number(minutes || 0);
+
+
+    if(value < 0.01){
+
+        return "0";
+
+    }
+
+
+    /*
+        Show whole minutes when possible,
+        otherwise show decimals.
+    */
+
+    if(
+        Math.abs(
+            value - Math.round(value)
+        ) < 0.01
+    ){
+
+        return String(
+            Math.round(value)
+        );
+
+    }
+
+
+    return value.toFixed(2);
+
+}
+
+
+/* ================= SUBJECTS ================= */
+
+function renderSubjects(){
+
+    const grid =
+        document.getElementById(
+            "subjectsGrid"
+        );
+
+
+    if(!grid) return;
+
+
+    grid.innerHTML = "";
+
+
+    subjectList.forEach(
+        subject=>{
+
+            const icon =
+                subject[0];
+
+            const name =
+                subject[1];
+
+
+            const minutes =
+                Number(
+                    subjectMinutes[name] || 0
+                );
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card subject-card";
+
+
+            card.innerHTML = `
+
+                <div class="subject-icon">
+                    ${icon}
+                </div>
+
+                <h3>
+                    ${escapeHTML(name)}
+                </h3>
+
+                <div class="subject-hours">
+                    ${formatStudyMinutes(minutes)}
+                </div>
+
+                <p>
+                    Study minutes
+                </p>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "dashboardSubjects"
+        )
+        .textContent =
+        subjectList.length;
+
+}
+
+
+/* ================= STUDY VAULT ================= */
+
+window.addMaterial = async function(){
+
+    if(!currentUser){
+
+        showMessage(
+            "vaultMessage",
+            "Please login first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const title =
+        document
+        .getElementById(
+            "materialTitle"
+        )
+        .value
+        .trim();
+
+
+    const subject =
+        document
+        .getElementById(
+            "materialSubject"
+        )
+        .value;
+
+
+    const type =
+        document
+        .getElementById(
+            "materialType"
+        )
+        .value;
+
+
+    const textNote =
+        document
+        .getElementById(
+            "materialText"
+        )
+        .value
+        .trim();
+
+
+    const file =
+        document
+        .getElementById(
+            "materialFile"
+        )
+        .files[0];
+
+
+    if(!title){
+
+        showMessage(
+            "vaultMessage",
+            "Please enter a material title.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        type === "text" &&
+        !textNote
+    ){
+
+        showMessage(
+            "vaultMessage",
+            "Please write your text note.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        type !== "text" &&
+        !file
+    ){
+
+        showMessage(
+            "vaultMessage",
+            "Please select a file.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        showMessage(
+            "vaultMessage",
+            "Saving material...",
+            "info"
+        );
+
+
+        let downloadURL = "";
+
+        let storagePath = "";
+
+
+        if(file){
+
+            const safeName =
+                file.name.replace(
+                    /[^a-zA-Z0-9._-]/g,
+                    "_"
+                );
+
+
+            storagePath =
+                `studyVault/${currentUser.uid}/${Date.now()}_${safeName}`;
+
+
+            const storageRef =
+                ref(
+                    storage,
+                    storagePath
+                );
+
+
+            await uploadBytes(
+                storageRef,
+                file
+            );
+
+
+            downloadURL =
+                await getDownloadURL(
+                    storageRef
+                );
+
+        }
+
+
+        await addDoc(
+            collection(
+                db,
+                "materials"
+            ),
+            {
+
+                uid:
+                    currentUser.uid,
+
+                title:
+                    title,
+
+                subject:
+                    subject,
+
+                type:
+                    type,
+
+                text:
+                    textNote,
+
+                fileName:
+                    file
+                    ? file.name
+                    : "",
+
+                fileURL:
+                    downloadURL,
+
+                storagePath:
+                    storagePath,
+
+                createdAt:
+                    serverTimestamp()
+
+            }
+        );
+
+
+        document
+            .getElementById(
+                "materialTitle"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "materialText"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "materialFile"
+            )
+            .value = "";
+
+
+        showMessage(
+            "vaultMessage",
+            "Material saved to your Study Vault! ☁️",
+            "success"
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        showMessage(
+            "vaultMessage",
+            "Upload failed: " +
+            error.message,
+            "error"
+        );
+
+    }
+
+};
+
+
+/* ================= MATERIAL LISTENER ================= */
+
+function startMaterialsListener(){
+
+    if(!currentUser) return;
+
+
+    if(unsubscribeMaterials){
+
+        unsubscribeMaterials();
+
+    }
+
+
+    const q =
+        query(
+            collection(
+                db,
+                "materials"
+            ),
+            where(
+                "uid",
+                "==",
+                currentUser.uid
+            )
+        );
+
+
+    unsubscribeMaterials =
+        onSnapshot(
+            q,
+            snapshot=>{
+
+                materials =
+                    snapshot.docs.map(
+                        d=>({
+
+                            id:d.id,
+
+                            ...d.data()
+
+                        })
+                    );
+
+
+                renderMaterials();
+
+                updateAdminCounts();
+
+            },
+            error=>{
+
+                console.error(
+                    "Materials listener:",
+                    error
+                );
+
+            }
+        );
+
+}
+
+
+/* ================= RENDER MATERIALS ================= */
+
+function renderMaterials(){
+
+    const grid =
+        document.getElementById(
+            "materialsGrid"
+        );
+
+
+    if(!grid) return;
+
+
+    const search =
+        document
+        .getElementById(
+            "vaultSearch"
+        )
+        .value
+        .toLowerCase();
+
+
+    const filter =
+        document
+        .getElementById(
+            "vaultFilter"
+        )
+        .value;
+
+
+    const filtered =
+        materials.filter(
+            item=>{
+
+                const matchesSearch =
+                    (
+                        item.title ||
+                        ""
+                    )
+                    .toLowerCase()
+                    .includes(search);
+
+
+                const matchesSubject =
+                    filter === "All" ||
+                    item.subject === filter;
+
+
+                return (
+                    matchesSearch &&
+                    matchesSubject
+                );
+
+            }
+        );
+
+
+    grid.innerHTML = "";
+
+
+    if(filtered.length === 0){
+
+        grid.innerHTML = `
+
+            <div class="card">
+
+                <h3>
+                    📂 Vault is empty
+                </h3>
+
+                <p>
+                    Add your first PDF,
+                    image or text note above.
+                </p>
+
+            </div>
+
+        `;
+
+
+        document
+            .getElementById(
+                "dashboardMaterials"
+            )
+            .textContent =
+            0;
+
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        item=>{
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card material-card";
+
+
+            let icon = "📄";
+
+
+            if(item.type === "image")
+                icon = "🖼️";
+
+
+            if(item.type === "text")
+                icon = "📝";
+
+
+            let content = "";
+
+
+            if(item.type === "text"){
+
+                content = `
+
+                    <p
+                        style="white-space:pre-wrap"
+                    >
+                        ${escapeHTML(
+                            item.text || ""
+                        )}
+                    </p>
+
+                `;
+
+            }else{
+
+                content = `
+
+                    <p>
+                        ${escapeHTML(
+                            item.fileName ||
+                            "File"
+                        )}
+                    </p>
+
+                    ${
+                        item.fileURL
+                        ?
+
+                        `
+
+                        <a
+                            href="${item.fileURL}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            Open
+                        </a>
+
+                        `
+
+                        : ""
+                    }
+
+                `;
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="material-icon">
+                    ${icon}
+                </div>
+
+                <div class="material-type">
+                    ${escapeHTML(
+                        item.subject ||
+                        "Other"
+                    )}
+                </div>
+
+                <h3>
+                    ${escapeHTML(
+                        item.title ||
+                        "Untitled"
+                    )}
+                </h3>
+
+                <br>
+
+                ${content}
+
+                <div class="material-actions">
+
+                    <button
+                        class="danger-btn"
+                        onclick="deleteMaterial('${item.id}')"
+                    >
+                        🗑️ Delete
+                    </button>
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "dashboardMaterials"
+        )
+        .textContent =
+        materials.length;
+
+}
+
+
+/* ================= DELETE MATERIAL ================= */
+
+window.deleteMaterial = async function(id){
+
+    const item =
+        materials.find(
+            x=>x.id === id
+        );
+
+
+    if(!item) return;
+
+
+    if(
+        !confirm(
+            "Delete this material?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        if(item.storagePath){
+
+            try{
+
+                const storageRef =
+                    ref(
+                        storage,
+                        item.storagePath
+                    );
+
+
+                await deleteObject(
+                    storageRef
+                );
+
+            }catch(storageError){
+
+                console.warn(
+                    "Storage delete warning:",
+                    storageError
+                );
+
+            }
+
+        }
+
+
+        await deleteDoc(
+            doc(
+                db,
+                "materials",
+                id
+            )
+        );
+
+
+    }catch(error){
+
+        alert(
+            "Could not delete material: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ================= GROUPS ================= */
+
+window.createGroup = async function(){
+
+    if(!currentUser) return;
+
+
+    const name =
+        document
+        .getElementById(
+            "groupName"
+        )
+        .value
+        .trim();
+
+
+    const isPrivate =
+        document
+        .getElementById(
+            "groupPrivate"
+        )
+        .value === "true";
+
+
+    if(!name){
+
+        alert(
+            "Enter a group name."
+        );
+
+        return;
+
+    }
+
+
+    const code =
+        Math.random()
+        .toString(36)
+        .substring(2,8)
+        .toUpperCase();
+
+
+    try{
+
+        await addDoc(
+            collection(
+                db,
+                "groups"
+            ),
+            {
+
+                name:name,
+
+                ownerUid:
+                    currentUser.uid,
+
+                private:
+                    isPrivate,
+
+                code:code,
+
+                members:[
+                    currentUser.uid
+                ],
+
+                createdAt:
+                    serverTimestamp()
+
+            }
+        );
+
+
+        document
+            .getElementById(
+                "groupName"
+            )
+            .value = "";
+
+
+        alert(
+            "Group created!\n\nGroup code: " +
+            code
+        );
+
+
+    }catch(error){
+
+        alert(
+            "Could not create group: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ================= JOIN GROUP ================= */
+
+window.joinGroup = async function(){
+
+    if(!currentUser) return;
+
+
+    const code =
+        document
+        .getElementById(
+            "joinGroupCode"
+        )
+        .value
+        .trim()
+        .toUpperCase();
+
+
+    if(!code){
+
+        alert(
+            "Enter a group code."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const q =
+            query(
+                collection(
+                    db,
+                    "groups"
+                ),
+                where(
+                    "code",
+                    "==",
+                    code
+                )
+            );
+
+
+        const unsubscribe =
+            onSnapshot(
+                q,
+                async snapshot=>{
+
+                    unsubscribe();
+
+
+                    if(snapshot.empty){
+
+                        alert(
+                            "Group not found."
+                        );
+
+                        return;
+
+                    }
+
+
+                    const groupDoc =
+                        snapshot.docs[0];
+
+
+                    const group =
+                        groupDoc.data();
+
+
+                    const members =
+                        group.members || [];
+
+
+                    if(
+                        !members.includes(
+                            currentUser.uid
+                        )
+                    ){
+
+                        members.push(
+                            currentUser.uid
+                        );
+
+
+                        await updateDoc(
+                            groupDoc.ref,
+                            {
+                                members:members
+                            }
+                        );
+
+                    }
+
+
+                    document
+                        .getElementById(
+                            "joinGroupCode"
+                        )
+                        .value = "";
+
+
+                    alert(
+                        "Joined group! 🎉"
+                    );
+
+                }
+            );
+
+
+    }catch(error){
+
+        alert(
+            "Could not join group: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ================= GROUP LISTENER ================= */
+
+function startGroupsListener(){
+
+    if(!currentUser) return;
+
+
+    if(unsubscribeGroups){
+
+        unsubscribeGroups();
+
+    }
+
+
+    const q =
+        query(
+            collection(
+                db,
+                "groups"
+            ),
+            where(
+                "members",
+                "array-contains",
+                currentUser.uid
+            )
+        );
+
+
+    unsubscribeGroups =
+        onSnapshot(
+            q,
+            snapshot=>{
+
+                groups =
+                    snapshot.docs.map(
+                        d=>({
+
+                            id:d.id,
+
+                            ...d.data()
+
+                        })
+                    );
+
+
+                renderGroups();
+
+                updateAdminCounts();
+
+            },
+            error=>{
+
+                console.error(
+                    "Groups listener:",
+                    error
+                );
+
+            }
+        );
+
+}
+
+
+/* ================= RENDER GROUPS ================= */
+
+function renderGroups(){
+
+    const grid =
+        document.getElementById(
+            "groupsGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    if(groups.length === 0){
+
+        grid.innerHTML = `
+
+            <div class="card">
+
+                <h3>
+                    No groups yet 👥
+                </h3>
+
+                <p>
+                    Create or join a study group.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    groups.forEach(
+        group=>{
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card group-card";
+
+
+            card.innerHTML = `
+
+                <h3>
+                    👥
+                    ${escapeHTML(
+                        group.name
+                    )}
+                </h3>
+
+                <p>
+                    Members:
+                    ${
+                        (
+                            group.members ||
+                            []
+                        ).length
+                    }
+                </p>
+
+                <div class="group-code">
+                    Code:
+                    ${escapeHTML(
+                        group.code || ""
+                    )}
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "dashboardGroups"
+        )
+        .textContent =
+        groups.length;
+
+}
+
+
+/* ================= USERS ================= */
+
+function startUsersListener(){
+
+    if(unsubscribeUsers){
+
+        unsubscribeUsers();
+
+    }
+
+
+    unsubscribeUsers =
+        onSnapshot(
+            collection(
+                db,
+                "users"
+            ),
+            snapshot=>{
+
+                users =
+                    snapshot.docs.map(
+                        d=>({
+
+                            id:d.id,
+
+                            ...d.data()
+
+                        })
+                    );
+
+
+                renderLeaderboard();
+
+
+                if(
+                    currentUser?.uid ===
+                    ADMIN_UID
+                ){
+
+                    document
+                        .getElementById(
+                            "adminUsers"
+                        )
+                        .textContent =
+                        users.length;
+
+                }
+
+            },
+            error=>{
+
+                console.error(
+                    "Users listener:",
+                    error
+                );
+
+            }
+        );
+
+}
+
+
+/* ================= LEADERBOARD ================= */
+
+function renderLeaderboard(){
+
+    const grid =
+        document.getElementById(
+            "leaderboardGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    const sorted =
+        [...users].sort(
+            (a,b)=>
+                (b.totalMinutes || 0) -
+                (a.totalMinutes || 0)
+        );
+
+
+    if(sorted.length === 0){
+
+        grid.innerHTML = `
+
+            <div class="card">
+
+                <h3>
+                    No users yet.
+                </h3>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    sorted.forEach(
+        (user,index)=>{
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card";
+
+
+            card.innerHTML = `
+
+                <h3>
+
+                    ${index + 1}.
+
+                    ${escapeHTML(
+                        user.name ||
+                        "Student"
+                    )}
+
+                </h3>
+
+                <p>
+
+                    ⏱️
+                    ${formatStudyMinutes(
+                        user.totalMinutes || 0
+                    )}
+                    study minutes
+
+                </p>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* ================= PROFILE ================= */
+
+window.saveProfile = async function(){
+
+    if(!currentUser) return;
+
+
+    const name =
+        document
+        .getElementById(
+            "profileName"
+        )
+        .value
+        .trim();
+
+
+    if(!name){
+
+        showMessage(
+            "profileMessage",
+            "Name cannot be empty.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        await updateProfile(
+            currentUser,
+            {
+                displayName:name
+            }
+        );
+
+
+        await setDoc(
+            doc(
+                db,
+                "users",
+                currentUser.uid
+            ),
+            {
+                name:name
+            },
+            {
+                merge:true
+            }
+        );
+
+
+        currentUserData.name =
+            name;
+
+
+        updateUserUI();
+
+
+        showMessage(
+            "profileMessage",
+            "Profile updated!",
+            "success"
+        );
+
+
+    }catch(error){
+
+        showMessage(
+            "profileMessage",
+            "Could not update profile: " +
+            error.message,
+            "error"
+        );
+
+    }
+
+};
+
+
+/* ================= LISTENERS ================= */
+
+function startListeners(){
+
+    startMaterialsListener();
+
+    startGroupsListener();
+
+    startUsersListener();
+
+}
+
+
+function stopListeners(){
+
+    if(unsubscribeMaterials){
+
+        unsubscribeMaterials();
+
+        unsubscribeMaterials = null;
+
+    }
+
+
+    if(unsubscribeGroups){
+
+        unsubscribeGroups();
+
+        unsubscribeGroups = null;
+
+    }
+
+
+    if(unsubscribeUsers){
+
+        unsubscribeUsers();
+
+        unsubscribeUsers = null;
+
+    }
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+window.logout = async function(){
+
+    /*
+        Save the currently running time before logout.
+    */
+
+    if(isStudying){
+
+        stopwatchElapsedSeconds =
+            calculateCurrentElapsedSeconds();
+
+        await recordCurrentElapsedTime();
+
+    }
+
+
+    stopStopwatch(false);
+
+    stopListeners();
+
+    await signOut(auth);
+
+};
+
+
+/* ================= ESCAPE HTML ================= */
+
+function escapeHTML(value){
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ================= ADMIN COUNTS ================= */
+
+function updateAdminCounts(){
+
+    if(
+        currentUser?.uid !==
+        ADMIN_UID
+    ){
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "adminMaterials"
+        )
+        .textContent =
+        materials.length;
+
+
+    document
+        .getElementById(
+            "adminGroups"
+        )
+        .textContent =
+        groups.length;
+
+}
+
+
+/* ================= INIT ================= */
+
+loadTheme();
+
+renderSubjects();
+
+updateTimerDisplay();
+
+updateCurrentStatus();
+
+</script>
+
+</body>
+</html>
